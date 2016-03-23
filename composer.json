@@ -1,0 +1,12 @@
+{
+    "name": "hce/microframework-core",
+    "description": "microframework core files",
+    "authors": [
+        {
+            "name": "Gatto",
+            "email": "mboffo@hce.it"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
