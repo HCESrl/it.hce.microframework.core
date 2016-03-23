@@ -1,8 +1,8 @@
 <?php
 
 namespace it\hce\microframework\core\factories;
-
 use it\hce\microframework\core\MicroFramework;
+use it\hce\microframework\core\exceptions\ResourceWriteException;
 use Leafo\ScssPhp\Compiler;
 use MatthiasMullie\Minify\CSS;
 
@@ -30,10 +30,14 @@ class SassFactory {
         $this->compiler->setImportPaths(MicroFramework::getResourcesPath() . 'css/');
     }
 
-    public function write($path)
+    public function write($file)
     {
         $this->minifier->add($this->compiler->compile($this->main));
 
-        file_put_contents($path, $this->minifier->minify());
+        if(is_writable(dirname($file))) {
+            file_put_contents($file, $this->minifier->minify());
+        } else {
+            throw new ResourceWriteException($file . ' not writable');
+        }
     }
 }

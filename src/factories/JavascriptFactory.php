@@ -2,7 +2,9 @@
 
 namespace it\hce\microframework\core\factories;
 
+
 use it\hce\microframework\core\MicroFramework;
+use it\hce\microframework\core\exceptions\ResourceWriteException;
 use MatthiasMullie\Minify;
 use MatthiasMullie\Minify\JS;
 use RecursiveDirectoryIterator;
@@ -32,10 +34,15 @@ class JavascriptFactory
     /**
      * Writes the output in a file
      * @param $file string path of the file
+     * @throws ResourceWriteException the file is not writable
      */
     public function write($file)
     {
-        file_put_contents($file, $this->output());
+        if(is_writable(dirname($file))) {
+            file_put_contents($file, $this->output());
+        } else {
+            throw new ResourceWriteException($file . ' not writable');
+        }
     }
 
     public function collectJS()

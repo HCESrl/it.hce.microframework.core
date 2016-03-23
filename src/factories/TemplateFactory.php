@@ -4,6 +4,7 @@ namespace it\hce\microframework\core\factories;
 
 
 use it\hce\microframework\components;
+use it\hce\microframework\core\exceptions\ResourceWriteException;
 use it\hce\microframework\core\MicroFramework;
 
 class TemplateFactory
@@ -32,12 +33,20 @@ class TemplateFactory
             // Write minified JS to main.js
             $jsFactory = new JavascriptFactory();
             $jsFactory->collectJS();
-            $jsFactory->write(MicroFramework::getPublicPath() . 'js/main.js');
+            try {
+                $jsFactory->write(MicroFramework::getPublicPath() . 'js/main.js');
+            } catch (ResourceWriteException $e) {
+                die($e->getMessage());
+            }
 
             // Write minified CSS to main.css
             $sassFactory = new SassFactory();
             $sassFactory->collectSCSS();
-            $sassFactory->write(MicroFramework::getPublicPath() . 'css/main.css');
+            try {
+                $sassFactory->write(MicroFramework::getPublicPath() . 'css/main.css');
+            } catch (ResourceWriteException $e) {
+                die($e->getMessage());
+            }
 
         }
 

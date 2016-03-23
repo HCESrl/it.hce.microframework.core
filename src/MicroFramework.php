@@ -16,6 +16,7 @@ class MicroFramework {
     public function __construct()
     {
         // Include the components
+        include_once ('exceptions/ResourceWriteException.php');
         include_once ('factories/TemplateFactory.php');
         include_once ('factories/AjaxFactory.php');
         include_once ('factories/JavascriptFactory.php');

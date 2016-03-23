@@ -1,15 +1,16 @@
 {
-    "name": "hce/microframework-core",
-    "description": "microframework core files",
-    "authors": [
-        {
-            "name": "Gatto",
-            "email": "mboffo@hce.it"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "matthiasmullie/minify": "^1.3",
-        "leafo/scssphp": "^0.6.2"
+  "name": "hce/microframework-core",
+  "version": "0.0.1",
+  "description": "microframework core files",
+  "authors": [
+    {
+      "name": "Gatto",
+      "email": "mboffo@hce.it"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "matthiasmullie/minify": "^1.3",
+    "leafo/scssphp": "^0.6.2"
+  }
 }
