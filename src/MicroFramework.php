@@ -42,7 +42,7 @@ class MicroFramework {
      */
     public static function getBasePath()
     {
-		return realpath(dirname(__FILE__)) . '/../';
+		return realpath(dirname(__FILE__)) . '/../../../../'; //TODO: refactor
 	}
 
     /**
