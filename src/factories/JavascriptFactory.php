@@ -15,6 +15,7 @@ use RegexIterator;
 class JavascriptFactory
 {
     private $minifier;
+    protected $latestModifiedDate = 0;
 
     public function __construct()
     {
@@ -38,10 +39,15 @@ class JavascriptFactory
      */
     public function write($file)
     {
-        if(is_writable(dirname($file))) {
-            file_put_contents($file, $this->output());
+        $timeOfLatestOutput = filemtime($file);
+        if($timeOfLatestOutput < $this->latestModifiedDate) { // latest output was earlier than latest modified time, republish
+            if (is_writable(dirname($file))) {
+                file_put_contents($file, $this->output());
+            } else {
+                throw new ResourceWriteException($file . ' not writable');
+            }
         } else {
-            throw new ResourceWriteException($file . ' not writable');
+            // do nothing
         }
     }
 
@@ -81,7 +87,7 @@ class JavascriptFactory
         $Regex = new RegexIterator($Iterator, '/^.+\.js$/i', RecursiveRegexIterator::GET_MATCH);
 
         foreach ($Regex as $k => $v) {
-            $this->collectJsFromFile($k);
+            $this->collectJSFromFile($k);
         }
     }
 
@@ -101,6 +107,12 @@ class JavascriptFactory
      */
     private function collectJSFromFile($file, $base = false)
     {
+        // get date of last modification of file
+        $fileDate = filemtime($file);
+        if($fileDate > $this->latestModifiedDate){
+            $this->latestModifiedDate = $fileDate;
+        }
+
         $jsResult = '';
         $jsResult .= "\r\n/* INCLUDE $file */ \r\n";
         $jsResult .= file_get_contents($file);
