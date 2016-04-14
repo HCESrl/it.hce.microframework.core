@@ -32,7 +32,7 @@ class JavascriptFactory
         return $this->minifier->minify();
     }
 
-    /**
+    /** 
      * Writes the output in a file
      * @param $file string path of the file
      * @throws ResourceWriteException the file is not writable
