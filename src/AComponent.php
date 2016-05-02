@@ -11,11 +11,12 @@ abstract class AComponent
     {
         $this->name = $name;
         $this->basePath = $basePath;
+        $dataset = $data["dataset"];
+        $this->dataSet =  $this->loadDataSet($dataset);
         $this->html = $this->loadHtml();
         $this->css = $this->loadCss();
         $this->config = $data;
-        $dataset = $data["dataset"];
-        $this->hydrate(is_null($dataset) ? 'default' : $dataset);
+        $this->hydrate();
     }
 
     public function getConfigValue($name)
@@ -49,11 +50,13 @@ abstract class AComponent
         return $data;
     }
 
-    public function hydrate($dataSet = 'default')
+    public function hydrate()
     {
-        $dataSet = $this->loadDataSet($dataSet);
-        foreach ($dataSet as $key => $data)
+        foreach ($this->dataSet as $key => $data)
         {
+            if(! is_string($data)){
+                continue;
+            }
             $data = $this->preprocessData($key, $data);
 
             // first try optional fields [[<p>{{{$key}}}</p>]]
@@ -86,6 +89,9 @@ abstract class AComponent
 
     private function loadDataSet($name = 'default')
     {
+        if(!$name){
+            $name = 'default';
+        }
         return json_decode(file_get_contents(MicroFramework::getComponentsPath() . $this->name . '/datasets/' . $name . '.json'), true);
     }
 
@@ -102,6 +108,34 @@ abstract class AComponent
 
     private function loadHtml($html = 'template')
     {
-        return file_get_contents(MicroFramework::getComponentsPath() . $this->name . '/' . $html . '.html');
+        $template =  file_get_contents(MicroFramework::getComponentsPath() . $this->name . '/' . $html . '.html');
+
+
+        // look for subtemplates
+
+        $pattern = "/(\[\[\[\\$[a-zA-Z0-9-_]+\]\]\])/";
+
+        $search =  preg_match_all($pattern, $template, $matches);
+        if($search === 1){
+            foreach($matches[1] as $k){
+                $variable = str_replace(array("[[[$", "]]]"), "", $k);
+                if(array_key_exists($variable, $this->dataSet)){
+                    $subtemplate_path = MicroFramework::getComponentsPath() . $this->name . '/_' . $this->dataSet[$variable]["templateName"] . '.html';
+                    if(file_exists($subtemplate_path)){
+                        $subtemplate =  file_get_contents($subtemplate_path);
+                        $template = str_replace($k, $subtemplate, $template);
+                    } else { // file cannot be loaded
+                        $template = str_replace($k, "", $template);
+                    }
+
+                } else {// subtemplate not found, remove placeholder
+                    $template =  str_replace($k, "", $template);
+                }
+            }
+        }
+
+        return $template;
+
+
     }
 }
