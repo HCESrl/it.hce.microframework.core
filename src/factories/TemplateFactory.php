@@ -39,14 +39,20 @@ class TemplateFactory
                 die($e->getMessage());
             }
 
+            $targetCssPath = MicroFramework::getPublicPath() . 'css/main.css';
+            if(file_exists($targetCssPath.".lock") && file_exists($targetCssPath)) {
+                // css is present and locked, do nothing
+            } else {
             // Write minified CSS to main.css
             $sassFactory = new SassFactory();
             $sassFactory->collectSCSS();
             try {
-                $sassFactory->write(MicroFramework::getPublicPath() . 'css/main.css');
+                    $sassFactory->write($targetCssPath);
             } catch (ResourceWriteException $e) {
                 die($e->getMessage());
             }
+            }
+
 
         }
 
