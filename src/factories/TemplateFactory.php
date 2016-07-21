@@ -3,7 +3,7 @@
 namespace it\hce\microframework\core\factories;
 
 
-use it\hce\microframework\components;
+use Jenssegers\Blade\Blade;
 use it\hce\microframework\core\exceptions\ResourceWriteException;
 use it\hce\microframework\core\MicroFramework;
 
@@ -16,6 +16,7 @@ class TemplateFactory
     static $ajaxFactory;
     static $templateName;
     static $componentsFactory;
+    static $blade;
 
     /**
      * @param $templateName
@@ -29,7 +30,41 @@ class TemplateFactory
         // Check if the request is AJAX type and load the factory
         self::$ajaxFactory = new AjaxFactory($ajax);
 
-        if(!$ajax){
+        // Load the template file
+        self::$currentTemplate = file_get_contents(MicroFramework::getTemplatesPath() . $templateName . self::templatesExt);
+
+        // If the current template is valid, load the components factory
+        if (self::$currentTemplate) {
+
+            // if we aren't in an AJAX context, write the resources
+            if(! self::$ajaxFactory->isAjax()) {
+                self::compileResources();
+                self::writeJS();
+            }
+
+            return self::loadComponents($componentsArray, $headCssComponentName);
+        }
+
+        return false;
+    }
+
+    /*public static function loadBladeTemplate($templateName = 'homepage') {
+        self::$blade = new Blade(MicroFramework::getComponentsPath(), '');
+        return self::$blade->make($templateName, []);
+    }*/
+
+    private static function compileResources() {
+        self::compileJS();
+        self::compileCSS();
+    }
+
+    private static function compileJS() {
+        $targetJsPath = MicroFramework::getPublicPath() . 'js/main.js';
+
+        // js routine
+        if (file_exists($targetJsPath . ".lock") && file_exists($targetJsPath)) {
+            // js is present and locked, do nothing
+        } else {
             // Write minified JS to main.js
             $jsFactory = new JavascriptFactory();
             $jsFactory->collectJS();
@@ -38,49 +73,42 @@ class TemplateFactory
             } catch (ResourceWriteException $e) {
                 die($e->getMessage());
             }
+        }
+    }
 
-            $targetCssPath = MicroFramework::getPublicPath() . 'css/main.css';
-            if(file_exists($targetCssPath.".lock") && file_exists($targetCssPath)) {
-                // css is present and locked, do nothing
-            } else {
+    private static function compileCSS() {
+        $targetCssPath = MicroFramework::getPublicPath() . 'css/main.css';
+
+        // css routine
+        if(file_exists($targetCssPath . ".lock") && file_exists($targetCssPath)) {
+            // css is present and locked, do nothing
+        } else {
             // Write minified CSS to main.css
             $sassFactory = new SassFactory();
             $sassFactory->collectSCSS();
             try {
-                    $sassFactory->write($targetCssPath);
+                $sassFactory->write($targetCssPath);
             } catch (ResourceWriteException $e) {
                 die($e->getMessage());
             }
-            }
-
-
         }
+    }
 
-        // Load the template file
-        self::$currentTemplate = file_get_contents(MicroFramework::getTemplatesPath() . $templateName . self::templatesExt);
+    private static function loadComponents($componentsArray, $headCssComponentName) {
+        // Load ComponentsFactory
+        self::$componentsFactory = new ComponentsFactory(MicroFramework::getBasePath(), $componentsArray);
 
-        // If the current template is valid, load the components factory
-        if (self::$currentTemplate) {
-            // Load ComponentsFactory
-            self::$componentsFactory = new ComponentsFactory(MicroFramework::getBasePath(), $componentsArray);
+        // Load a possible headCss component and write it to the header
+        $headCssComponent = self::$componentsFactory->loadHeadComponent($headCssComponentName);
 
-            // Load a possible headCss component and write it to the header
-            $headCssComponent = self::$componentsFactory->loadHeadComponent($headCssComponentName);
+        // Load the components array
+        $components = self::$componentsFactory->loadComponents();
 
-            // Load the components array
-            $components = self::$componentsFactory->loadComponents();
+        // Write HTML
+        self::writeTimestampOnTemplate();
 
-            // Write HTML
-            TemplateFactory::writeTimestampOnTemplate();
-            if(!$ajax){
-                TemplateFactory::writeJS();
-            }
-            TemplateFactory::writeComponents($components);
-
-            return self::$currentTemplate;
-        }
-
-        return false;
+        // save the results
+        return self::writeComponents($components);
     }
 
     /**
@@ -102,6 +130,7 @@ class TemplateFactory
     /**
      * Writes components' HTML inside the template
      * @param array $components
+     * @return mixed
      */
     private static function writeComponents($components)
     {
@@ -114,6 +143,8 @@ class TemplateFactory
             sleep(2); //TODO: ?
             $componentContent = json_encode($componentContent);
         }
-        self::$currentTemplate = str_replace('{{{$components}}}', $componentContent, self::$currentTemplate);
+
+        // save the result and return it
+        return self::$currentTemplate = str_replace('{{{$components}}}', $componentContent, self::$currentTemplate);
     }
 }

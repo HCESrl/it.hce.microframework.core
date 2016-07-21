@@ -1,6 +1,6 @@
 {
   "name": "hce/microframework-core",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "microframework core files",
   "authors": [
     {
@@ -12,6 +12,7 @@
   "require": {
     "matthiasmullie/minify": "^1.3",
     "leafo/scssphp": "^0.6.2",
-    "cssjanus/cssjanus": "^1.1"
+    "cssjanus/cssjanus": "^1.1",
+    "jenssegers/blade": "^1.0"
   }
 }
