@@ -42,7 +42,7 @@ class TemplateFactory
                 self::writeJS();
             }
 
-            return self::loadComponents($componentsArray, $headCssComponentName);
+            return self::loadComponents($componentsArray, $headCssComponentName, self::$ajaxFactory->isAjax());
         }
 
         return false;
@@ -94,7 +94,7 @@ class TemplateFactory
         }
     }
 
-    private static function loadComponents($componentsArray, $headCssComponentName) {
+    private static function loadComponents($componentsArray, $headCssComponentName, $isAjax) {
         // Load ComponentsFactory
         self::$componentsFactory = new ComponentsFactory(MicroFramework::getBasePath(), $componentsArray);
 
@@ -108,7 +108,7 @@ class TemplateFactory
         self::writeTimestampOnTemplate();
 
         // save the results
-        return self::writeComponents($components);
+        return self::writeComponents($components, $isAjax);
     }
 
     /**
@@ -130,16 +130,17 @@ class TemplateFactory
     /**
      * Writes components' HTML inside the template
      * @param array $components
+     * @param bool $isAjax
      * @return mixed
      */
-    private static function writeComponents($components)
+    private static function writeComponents($components, $isAjax)
     {
         $componentContent = '';
         foreach ($components as $component) {
             $componentContent .= $component->getHtml();
         }
 
-        if (self::$ajaxFactory->isAjax) {
+        if($isAjax) {
             sleep(2); //TODO: ?
             $componentContent = json_encode($componentContent);
         }
