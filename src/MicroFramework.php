@@ -15,15 +15,6 @@ class MicroFramework {
      */
     public function __construct()
     {
-        // Include the components
-        include_once ('exceptions/ResourceWriteException.php');
-        include_once ('factories/TemplateFactory.php');
-        include_once ('factories/AjaxFactory.php');
-        include_once ('factories/JavascriptFactory.php');
-        include_once ('factories/SassFactory.php');
-        include_once ('factories/ComponentsFactory.php');
-        include_once ('AComponent.php');
-
         // Reads from the URL
         $file = isset($_GET['file']) ? $this->getPublicPath($_GET['file'] . '.php') : $this->getPublicPath('homepage/homepage.php');
         if(file_exists($file))

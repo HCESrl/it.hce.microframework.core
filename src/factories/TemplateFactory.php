@@ -48,10 +48,15 @@ class TemplateFactory
         return false;
     }
 
-    /*public static function loadBladeTemplate($templateName = 'homepage') {
-        self::$blade = new Blade(MicroFramework::getComponentsPath(), '');
-        return self::$blade->make($templateName, []);
-    }*/
+//    /**
+//     * Loads a Blade template
+//     * @param string $templateName
+//     * @return mixed
+//     */
+//    public static function loadBladeTemplate($templateName = 'homepage', $components) {
+//        self::$blade = new Blade(MicroFramework::getTemplatesPath(), '');
+//        return self::$blade->make($templateName, []);
+//    }
 
     private static function compileResources() {
         self::compileJS();

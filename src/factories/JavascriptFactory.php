@@ -19,8 +19,6 @@ class JavascriptFactory
 
     public function __construct()
     {
-        include_once(MicroFramework::getBasePath() . 'vendor/matthiasmullie/minify/src/Minify.php');
-        include_once(MicroFramework::getBasePath() . 'vendor/matthiasmullie/minify/src/JS.php');
         $this->minifier = new JS();
     }
 

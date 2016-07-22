@@ -1,6 +1,8 @@
 <?php
 
 namespace it\hce\microframework\core\factories;
+
+
 use it\hce\microframework\core\MicroFramework;
 use it\hce\microframework\core\exceptions\ResourceWriteException;
 use Leafo\ScssPhp\Compiler;
@@ -14,15 +16,8 @@ class SassFactory {
 
     public function __construct()
     {
-        include_once (MicroFramework::getBasePath() . 'vendor/leafo/scssphp/scss.inc.php');
         $this->compiler = new Compiler();
-
         $this->main = file_get_contents(MicroFramework::getResourcesPath() . 'css/main.scss');
-
-        include_once(MicroFramework::getBasePath() . 'vendor/matthiasmullie/minify/src/Minify.php');
-        include_once(MicroFramework::getBasePath() . 'vendor/matthiasmullie/minify/src/CSS.php');
-        include_once(MicroFramework::getBasePath() . 'vendor/matthiasmullie/path-converter/src/Converter.php');
-
         $this->minifier = new CSS();
     }
 

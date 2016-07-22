@@ -2,6 +2,7 @@
 
 namespace it\hce\microframework\core\exceptions;
 
+
 use Exception;
 
 class ResourceWriteException extends Exception {
