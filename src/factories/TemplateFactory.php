@@ -48,15 +48,30 @@ class TemplateFactory
         return false;
     }
 
-//    /**
-//     * Loads a Blade template
-//     * @param string $templateName
-//     * @return mixed
-//     */
-//    public static function loadBladeTemplate($templateName = 'homepage', $components) {
-//        self::$blade = new Blade(MicroFramework::getTemplatesPath(), '');
-//        return self::$blade->make($templateName, []);
-//    }
+    /**
+     * Loads a Blade template
+     * @param string $templateName
+     * @param $models
+     * @return mixed
+     */
+    public static function loadBladeTemplate($templateName = 'homepage', $models = []) {
+        // init Blade
+        self::$blade = new Blade(MicroFramework::getBasePath(), MicroFramework::getCachePath());
+
+        // load models from JSON
+        foreach($models as $key => $value) {
+            $models[$key] = ComponentsFactory::loadJSON($key, $value);
+        }
+
+        // add global vars as a model
+        $global = [
+            'css' => '/css/main.css?' . time(),
+            'js' => '/js/main.js?' . time()
+        ];
+        $models = array_merge($models, ['GLOBAL' => (object)$global]);
+
+        return self::$blade->render($templateName, $models);
+    }
 
     private static function compileResources() {
         self::compileJS();

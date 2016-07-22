@@ -81,4 +81,12 @@ class MicroFramework {
     {
         return self::getBasePath() . 'resources/' . $file;
     }
+
+    /**
+     * @return string complete cache path
+     */
+    public static function getCachePath()
+    {
+        return self::getBasePath() . 'cache/';
+    }
 }

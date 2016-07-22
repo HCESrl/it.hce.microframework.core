@@ -98,4 +98,8 @@ class ComponentsFactory {
 
         return $ret;
     }
+
+    public static function loadJSON($componentName, $dataSet) {
+        return (object)json_decode(file_get_contents(MicroFramework::getComponentsPath($componentName . '/datasets/' . $dataSet . '.json')), true);
+    }
 }

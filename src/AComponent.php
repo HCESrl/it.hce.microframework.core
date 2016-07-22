@@ -110,9 +110,7 @@ abstract class AComponent
     {
         $template =  file_get_contents(MicroFramework::getComponentsPath() . $this->name . '/' . $html . '.html');
 
-
         // look for subtemplates
-
         $pattern = "/(\[\[\[\\$[a-zA-Z0-9-_]+\]\]\])/";
 
         $search =  preg_match_all($pattern, $template, $matches);
@@ -135,7 +133,5 @@ abstract class AComponent
         }
 
         return $template;
-
-
     }
 }

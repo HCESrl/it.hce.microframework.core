@@ -32,7 +32,6 @@ class SassFactory {
 
         if(is_writable(dirname($file))) {
             if(isset($_GET['rtl']) && $_GET['rtl'] === 'true') {
-                include_once(MicroFramework::getBasePath() . 'vendor/cssjanus/cssjanus/src/CSSJanus.php');
                 $this->minifier->add(CSSJanus::transform($compiledSass));
             } else {
                 $this->minifier->add($compiledSass);
