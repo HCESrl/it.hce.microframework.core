@@ -18,8 +18,8 @@
   "autoload": {
     "psr-4": {
       "it\\hce\\microframework\\core\\": "src/",
-      "it\\hce\\microframework\\core\\factories": "src/factories",
-      "it\\hce\\microframework\\core\\exceptions": "src/exceptions"
+      "it\\hce\\microframework\\core\\factories\\": "src/factories",
+      "it\\hce\\microframework\\core\\exceptions\\": "src/exceptions"
     }
   }
 }
