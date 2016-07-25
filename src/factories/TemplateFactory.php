@@ -10,6 +10,7 @@ use it\hce\microframework\core\MicroFramework;
 class TemplateFactory
 {
     const templatesExt = '.html';
+    const mainScssFilename = 'main';
 
     static $currentTemplate;
     static $jsLibs = false;
@@ -17,6 +18,30 @@ class TemplateFactory
     static $templateName;
     static $componentsFactory;
     static $blade;
+
+    static $isRTL = false; // whether the current template is RTL or not
+    static $currentLanguage = "en"; // defaults to English
+
+    /**
+     * Sets current template language for language-specific functions
+     * @param $lang
+     */
+    public static function setLanguage($lang) {
+        if($lang){
+            self::$currentLanguage = $lang;
+        }
+    }
+
+    /**
+     * Sets current main template direction as rtl to use CSS Janus internally
+     * @param $direction
+     */
+    public static function setDirection($direction) {
+        switch($direction){
+            case "rtl":
+                self::$isRTL = true;
+        }
+    }
 
     /**
      * @param $templateName
@@ -96,8 +121,19 @@ class TemplateFactory
         }
     }
 
+    private static function getCurrentCssFilename($addExtension = false) {
+        $fileName = self::$mainScssFilename;
+        if(self::$isRTL){
+            $fileName .= "-rtl";
+        }
+        if($addExtension){
+            $fileName.= ".css";
+        }
+        return $fileName;
+    }
+
     private static function compileCSS() {
-        $targetCssPath = MicroFramework::getPublicPath() . 'css/main.css';
+        $targetCssPath = MicroFramework::getPublicPath() . 'css/'. self::getCurrentCssFilename(true);
 
         // css routine
         if(file_exists($targetCssPath . ".lock") && file_exists($targetCssPath)) {

@@ -17,7 +17,7 @@ class SassFactory {
     public function __construct()
     {
         $this->compiler = new Compiler();
-        $this->main = file_get_contents(MicroFramework::getResourcesPath() . 'css/main.scss');
+        $this->main = file_get_contents(MicroFramework::getResourcesPath() . 'css/'. TemplateFactory::$mainScssFilename.'.scss');
         $this->minifier = new CSS();
     }
 
@@ -31,7 +31,7 @@ class SassFactory {
         $compiledSass = $this->compiler->compile($this->main);
 
         if(is_writable(dirname($file))) {
-            if(isset($_GET['rtl']) && $_GET['rtl'] === 'true') {
+            if(TemplateFactory::$isRTL) {
                 $this->minifier->add(CSSJanus::transform($compiledSass));
             } else {
                 $this->minifier->add($compiledSass);
