@@ -3,9 +3,8 @@
 namespace it\hce\microframework\core\factories;
 
 
-use it\hce\microframework\core\MicroFramework;
 use it\hce\microframework\core\exceptions\ResourceWriteException;
-use MatthiasMullie\Minify;
+use it\hce\microframework\core\helpers\PathHelper;
 use MatthiasMullie\Minify\JS;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -14,84 +13,45 @@ use RegexIterator;
 
 class JavascriptFactory
 {
-    private $minifier;
-    protected $latestModifiedDate = 0;
+    const staticJS = 'javascripts.json';
 
+    private $minifier;
+
+    /**
+     * JavascriptFactory constructor.
+     */
     public function __construct()
     {
         $this->minifier = new JS();
     }
 
     /**
-     * @return string min output
+     * Collects the whole JS library
      */
-    public function output()
-    {
-        return $this->minifier->minify();
-    }
-
-    /** 
-     * Writes the output in a file
-     * @param $file string path of the file
-     * @throws ResourceWriteException the file is not writable
-     */
-    public function write($file)
-    {
-        $timeOfLatestOutput = filemtime($file);
-        if($timeOfLatestOutput < $this->latestModifiedDate) { // latest output was earlier than latest modified time, republish
-            if (is_writable(dirname($file))) {
-                file_put_contents($file, $this->output());
-            } else {
-                throw new ResourceWriteException($file . ' not writable');
-            }
-        } else {
-            // do nothing
-        }
-    }
-
     public function collectJS()
     {
         // Read manual JS includes from a JSON file
-        $this->getStaticLibs();
+        $this->getStaticJS();
 
         // Read components' JS
-        $this->getComponentsLibs();
+        $this->getComponentsJS();
     }
 
-    private function getStaticLibs()
+    private function getStaticJS()
     {
-        $file = file_get_contents(MicroFramework::getConfigPath('javascripts.json'));
+        // get the file and decode it
+        $file = file_get_contents(PathHelper::getConfigPath(self::staticJS));
         $files = json_decode($file);
 
+        // complete the path
         foreach ($files as $key => $value) {
-            $files[$key] = MicroFramework::getBasePath() . $value;
+            $files[$key] = PathHelper::getBasePath() . $value;
         }
 
+        // collect the static libraries
         $this->collectJSFromFiles($files);
     }
 
-    private function getComponentsLibs()
-    {
-        $this->collectJSFromDirectory(MicroFramework::getComponentsPath());
-    }
-
-    /**
-     * @param $directory
-     */
-    private function collectJSFromDirectory($directory)
-    {
-        $Directory = new RecursiveDirectoryIterator($directory);
-        $Iterator = new RecursiveIteratorIterator($Directory);
-        $Regex = new RegexIterator($Iterator, '/^.+\.js$/i', RecursiveRegexIterator::GET_MATCH);
-
-        foreach ($Regex as $k => $v) {
-            $this->collectJSFromFile($k);
-        }
-    }
-
-    /**
-     * @param $files
-     */
     private function collectJSFromFiles($files)
     {
         foreach ($files as $file) {
@@ -99,22 +59,50 @@ class JavascriptFactory
         }
     }
 
-    /**
-     * @param $file
-     * @param $base
-     */
-    private function collectJSFromFile($file, $base = false)
+    private function collectJSFromFile($file)
     {
-        // get date of last modification of file
-        $fileDate = filemtime($file);
-        if($fileDate > $this->latestModifiedDate){
-            $this->latestModifiedDate = $fileDate;
-        }
-
-        $jsResult = '';
-        $jsResult .= "\r\n/* INCLUDE $file */ \r\n";
-        $jsResult .= file_get_contents($file);
-
+        $jsResult = '\r\n/* INCLUDE $file */ \r\n' . file_get_contents($file);
         $this->minifier->add($jsResult);
+    }
+
+    private function getComponentsJS()
+    {
+        $this->collectJSFromDirectory(PathHelper::getComponentsPath());
+    }
+
+    private function collectJSFromDirectory($directory)
+    {
+        //look for all script.js in components' folder recursively
+        $directory = new RecursiveDirectoryIterator($directory);
+        $iterator = new RecursiveIteratorIterator($directory);
+        $result = new RegexIterator($iterator, '/^.+\.js$/i', RecursiveRegexIterator::GET_MATCH);
+
+        foreach ($result as $key => $value) {
+            // collect the JS source
+            $this->collectJSFromFile($key);
+        }
+    }
+
+    /**
+     * Writes the output in a file
+     * @param $file string path of the file
+     * @throws ResourceWriteException the file is not writable
+     */
+    public function write($file)
+    {
+        if (is_writable(dirname($file))) {
+            file_put_contents($file, $this->output());
+        } else {
+            throw new ResourceWriteException($file . ' not writable');
+        }
+    }
+
+    /**
+     * Get the minifier output
+     * @return string min output
+     */
+    public function output()
+    {
+        return $this->minifier->minify();
     }
 }

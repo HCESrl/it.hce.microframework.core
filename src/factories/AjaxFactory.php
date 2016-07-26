@@ -2,7 +2,9 @@
 
 namespace it\hce\microframework\core\factories;
 
-class AjaxFactory {
+
+class AjaxFactory
+{
     private $isAjax;
 
     /**
@@ -11,22 +13,22 @@ class AjaxFactory {
      */
     public function __construct($isAjax = false)
     {
-        if($this->isAjax = $isAjax)
-        {
+        if ($this->isAjax = $isAjax) {
             $this->setHeader();
         }
+    }
+
+    private function setHeader()
+    {
+        header('Content-Type: application/json');
     }
 
     /**
      * Checks if the page is AJAX based
      * @return bool
      */
-    public function isAjax() {
-        return $this->isAjax;
-    }
-
-    private function setHeader()
+    public function isAjax()
     {
-        header('Content-Type: application/json');
+        return $this->isAjax;
     }
 }

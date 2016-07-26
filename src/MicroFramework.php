@@ -2,12 +2,17 @@
 
 namespace it\hce\microframework\core;
 
+
+use it\hce\microframework\core\factories\ResourcesFactory;
+
 /**
  * Class MicroFramework
  * @package it\hce\microframework\core
  * @author Marco 'Gatto' Boffo <mboffo@hce.it>
  */
-class MicroFramework {
+class MicroFramework
+{
+    private $controller;
 
     /**
      * MicroFramework constructor.
@@ -15,78 +20,14 @@ class MicroFramework {
      */
     public function __construct()
     {
-        // Reads from the URL
-        $file = isset($_GET['file']) ? $this->getPublicPath($_GET['file'] . '.php') : $this->getPublicPath('homepage/homepage.php');
-        if(file_exists($file))
-        {
-            // Setup
-            $framework = $this;
+        ResourcesFactory::writeResources();
+        $this->controller = new Controller(Controller::getControllerFromUrl());
 
-            // Starts the magic
-            include_once($file);
-        } else {
-            header("HTTP/1.0 404 Not Found");
-        }
+        $this->printTemplate();
     }
 
-    /**
-     * @return string project's base path
-     */
-    public static function getBasePath()
+    private function printTemplate()
     {
-		return realpath(dirname(__FILE__)) . '/../../../../'; //TODO: refactor
-	}
-
-    /**
-     * @param string $file inside the public path
-     * @return string complete path
-     */
-    public static function getPublicPath($file = '')
-    {
-        return self::getBasePath() . 'public/' . $file;
-    }
-
-    /**
-     * @param string $file inside the templates path
-     * @return string complete path
-     */
-    public static function getTemplatesPath($file = '')
-    {
-        return self::getBasePath() . 'templates/' . $file;
-    }
-
-    /**
-     * @param string $file inside the components path
-     * @return string complete path
-     */
-    public static function getComponentsPath($file = '')
-    {
-        return self::getBasePath() . 'components/' . $file;
-    }
-
-    /**
-     * @param string $file inside the config path
-     * @return string complete path
-     */
-    public static function getConfigPath($file = '')
-    {
-        return self::getBasePath() . 'config/' . $file;
-    }
-
-    /**
-     * @param string $file inside the resources path
-     * @return string complete path
-     */
-    public static function getResourcesPath($file = '')
-    {
-        return self::getBasePath() . 'resources/' . $file;
-    }
-
-    /**
-     * @return string complete cache path
-     */
-    public static function getCachePath()
-    {
-        return self::getBasePath() . 'cache/';
+        echo $this->controller;
     }
 }

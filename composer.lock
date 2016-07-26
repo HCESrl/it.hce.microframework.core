@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "646c6f2016a739655d1b9085a25f015b",
-    "content-hash": "5927099c093130b2a15e5d8e1fc420df",
+    "hash": "a1b8a18960f7960201ba974c7d4753d7",
+    "content-hash": "281ff4f88358e596e10222f051ce056d",
     "packages": [
         {
             "name": "cssjanus/cssjanus",
@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "72d545e8af75f5d1d82a425be2c298ccd50332b5"
+                "reference": "1645cb9e654a3b23eb72af204cfa573989b52d33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/72d545e8af75f5d1d82a425be2c298ccd50332b5",
-                "reference": "72d545e8af75f5d1d82a425be2c298ccd50332b5",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/1645cb9e654a3b23eb72af204cfa573989b52d33",
+                "reference": "1645cb9e654a3b23eb72af204cfa573989b52d33",
                 "shasum": ""
             },
             "require": {
@@ -192,7 +192,7 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "http://laravel.com",
-            "time": "2016-07-21 15:00:55"
+            "time": "2016-07-23 03:19:50"
         },
         {
             "name": "illuminate/events",
@@ -200,12 +200,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
-                "reference": "a015c930d9aafaf48e2fbf91d23fd70904f6e733"
+                "reference": "cd0ee809c526264e31eb9593b27d17d13ce21b49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/events/zipball/a015c930d9aafaf48e2fbf91d23fd70904f6e733",
-                "reference": "a015c930d9aafaf48e2fbf91d23fd70904f6e733",
+                "url": "https://api.github.com/repos/illuminate/events/zipball/cd0ee809c526264e31eb9593b27d17d13ce21b49",
+                "reference": "cd0ee809c526264e31eb9593b27d17d13ce21b49",
                 "shasum": ""
             },
             "require": {
@@ -237,7 +237,7 @@
             ],
             "description": "The Illuminate Events package.",
             "homepage": "http://laravel.com",
-            "time": "2016-06-01 13:50:01"
+            "time": "2016-07-23 03:47:02"
         },
         {
             "name": "illuminate/filesystem",
@@ -295,12 +295,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "370355ccfcae324435b61c2e431e989537034924"
+                "reference": "8c1e198cbd9d2395ebe955966c0c26716e7e70e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/370355ccfcae324435b61c2e431e989537034924",
-                "reference": "370355ccfcae324435b61c2e431e989537034924",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/8c1e198cbd9d2395ebe955966c0c26716e7e70e1",
+                "reference": "8c1e198cbd9d2395ebe955966c0c26716e7e70e1",
                 "shasum": ""
             },
             "require": {
@@ -345,7 +345,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
-            "time": "2016-07-21 15:00:55"
+            "time": "2016-07-26 00:30:54"
         },
         {
             "name": "illuminate/view",
@@ -442,6 +442,72 @@
                 "view"
             ],
             "time": "2015-08-29 09:09:57"
+        },
+        {
+            "name": "justinrainbow/json-schema",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/justinrainbow/json-schema.git",
+                "reference": "c269bdaa37cd7343c86773d9e9d70ced82473a45"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/c269bdaa37cd7343c86773d9e9d70ced82473a45",
+                "reference": "c269bdaa37cd7343c86773d9e9d70ced82473a45",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "json-schema/json-schema-test-suite": "1.2.0",
+                "phpdocumentor/phpdocumentor": "~2",
+                "phpunit/phpunit": "^4.8.22"
+            },
+            "bin": [
+                "bin/validate-json"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JsonSchema\\": "src/JsonSchema/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bruno Prieto Reis",
+                    "email": "bruno.p.reis@gmail.com"
+                },
+                {
+                    "name": "Justin Rainbow",
+                    "email": "justin.rainbow@gmail.com"
+                },
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch"
+                },
+                {
+                    "name": "Robert Schönthal",
+                    "email": "seroscho@googlemail.com"
+                }
+            ],
+            "description": "A library to validate a json schema.",
+            "homepage": "https://github.com/justinrainbow/json-schema",
+            "keywords": [
+                "json",
+                "schema"
+            ],
+            "time": "2016-07-25 23:45:42"
         },
         {
             "name": "leafo/scssphp",
@@ -702,12 +768,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "7bd1a604be83c0490b223df54581eaa01d97b9a3"
+                "reference": "081a5659f767d317ac71ce0bce8a2101467e816e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/7bd1a604be83c0490b223df54581eaa01d97b9a3",
-                "reference": "7bd1a604be83c0490b223df54581eaa01d97b9a3",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/081a5659f767d317ac71ce0bce8a2101467e816e",
+                "reference": "081a5659f767d317ac71ce0bce8a2101467e816e",
                 "shasum": ""
             },
             "require": {
@@ -751,7 +817,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:43:10"
+            "time": "2016-07-26 08:08:27"
         },
         {
             "name": "symfony/finder",

@@ -1,6 +1,6 @@
 {
   "name": "hce/microframework-core",
-  "version": "0.2.5",
+  "version": "1.0.0",
   "description": "microframework core files",
   "authors": [
     {
@@ -13,11 +13,13 @@
     "matthiasmullie/minify": "^1.3",
     "leafo/scssphp": "^0.6.2",
     "cssjanus/cssjanus": "^1.1",
-    "jenssegers/blade": "^1.0"
+    "jenssegers/blade": "^1.0",
+    "justinrainbow/json-schema": "^2.0"
   },
   "autoload": {
     "psr-4": {
       "it\\hce\\microframework\\core\\": "src/",
+      "it\\hce\\microframework\\core\\helpers\\": "src/helpers",
       "it\\hce\\microframework\\core\\factories\\": "src/factories",
       "it\\hce\\microframework\\core\\exceptions\\": "src/exceptions"
     }

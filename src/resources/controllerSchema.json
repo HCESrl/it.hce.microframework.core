@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "templateName": {
+      "type": "string",
+      "default": "homepage",
+      "required": true
+    },
+    "components": {
+      "type": "array",
+      "required": true,
+      "items": [
+        {
+          "type": "object",
+          "required": true,
+          "properties": {
+            "name": {
+              "type": "string",
+              "required": true
+            },
+            "componentName": {
+              "type": "string",
+              "required": true
+            },
+            "dataSet": {
+              "type": "string",
+              "required": true,
+              "default": "default"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
