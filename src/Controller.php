@@ -55,7 +55,7 @@ class Controller
     private function checkConfiguration()
     {
         $validator = new Validator();
-        $validator->check($this->config, file_get_contents(dirname(__FILE__) . 'resources/controllerSchema.json'));
+        $validator->check($this->config, file_get_contents(dirname(__FILE__) . '/resources/controllerSchema.json'));
 
         if (!$validator->isValid()) {
             throw new BadDefinitionException('The JSON file is not valid');
