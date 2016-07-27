@@ -17,7 +17,7 @@ class SassFactory {
     public function __construct()
     {
         $this->compiler = new Compiler();
-        $this->main = file_get_contents(MicroFramework::getResourcesPath() . 'css/'. TemplateFactory::$mainScssFilename.'.scss');
+        $this->main = file_get_contents(MicroFramework::getResourcesPath() . 'css/'. TemplateFactory::mainScssFilename.'.scss');
         $this->minifier = new CSS();
     }
 
