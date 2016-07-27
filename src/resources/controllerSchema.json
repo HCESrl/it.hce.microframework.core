@@ -6,6 +6,11 @@
       "default": "homepage",
       "required": true
     },
+    "direction": {
+      "type": "string",
+      "default": "ltr",
+      "required": false
+    },
     "components": {
       "type": "array",
       "required": true,
