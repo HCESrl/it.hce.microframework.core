@@ -2,6 +2,9 @@
 
 namespace it\hce\microframework\core;
 
+
+use it\hce\microframework\core\exceptions\FileNotFoundException;
+
 /**
  * Class MicroFramework
  * @package it\hce\microframework\core
@@ -15,18 +18,24 @@ class MicroFramework {
      */
     public function __construct()
     {
-        // Reads from the URL
-        $file = isset($_GET['file']) ? $this->getPublicPath($_GET['file'] . '.php') : $this->getPublicPath('homepage/homepage.php');
-        if(file_exists($file))
-        {
-            // Setup
-            $framework = $this;
+        try {
+            // Reads from the URL
+            $file = isset($_GET['file']) ? $this->getPublicPath($_GET['file'] . '.php') : $this->getPublicPath('homepage/homepage.php');
+            if(file_exists($file))
+            {
+                // Setup
+                $framework = $this;
 
-            // Starts the magic
-            include_once($file);
-        } else {
-            header("HTTP/1.0 404 Not Found");
+                // Starts the magic
+                include_once($file);
+            } else {
+                header("HTTP/1.0 404 Not Found");
+                throw new FileNotFoundException("File <strong>$file</strong> not found in application files.");
+            }
+        } catch (\Exception $e) {
+            exit  ("<h2 style='color:red'>MICROFRAMEWORK ERROR</h2><p>Error type: ". get_class($e) . "</p><p>Error message: " . $e->getMessage() ."</p>");
         }
+
     }
 
     /**

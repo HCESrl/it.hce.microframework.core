@@ -1,6 +1,7 @@
 <?php
 
 namespace it\hce\microframework\core\factories;
+error_reporting(E_ALL);
 
 
 use Jenssegers\Blade\Blade;
@@ -18,6 +19,7 @@ class TemplateFactory
     static $templateName;
     static $componentsFactory;
     static $blade;
+    static $extraStylesheets = array();
 
     static $isRTL = false; // whether the current template is RTL or not
     static $currentLanguage = "en"; // defaults to English
@@ -65,6 +67,7 @@ class TemplateFactory
             if(! self::$ajaxFactory->isAjax()) {
                 self::compileResources();
                 self::writeJS();
+                self::writeCSS();
             }
 
             return self::loadComponents($componentsArray, $headCssComponentName, self::$ajaxFactory->isAjax());
@@ -90,7 +93,7 @@ class TemplateFactory
 
         // add global vars as a model
         $global = [
-            'css' => '/css/main.css?' . time(),
+            'css' => self::getStylesheetsHTML(),
             'js' => '/js/main.js?' . time()
         ];
         $models = array_merge($models, ['GLOBAL' => (object)$global]);
@@ -181,6 +184,33 @@ class TemplateFactory
     private static function writeJS()
     {
         self::$currentTemplate = str_replace('{{{$jsFile}}}', '../js/main.js', self::$currentTemplate); // PHP COMPILED
+    }
+
+    private static function getStylesheets(){
+        $mainStylesheet =  array('../css/'.self::getCurrentCssFilename(true));
+        return array_add($mainStylesheet, self::$extraStylesheets);
+
+    }
+
+    private static function getStylesheetsHTML() {
+        // <link rel="stylesheet" href="{{{$mainCSSFilename}}}?{{{$time}}}">
+        $stylesheets = self::getStylesheets();
+        $time = time();
+        $stylesheetsHTML = "";
+        foreach($stylesheets as $path){
+            $stylesheetsHTML.= "<link rel='stylesheet' href='$path?$time'>\r\n";
+        }
+        return $stylesheetsHTML;
+    }
+
+    /**
+     * Writes main CSS file path to header
+     */
+    private static function writeCSS()
+    {
+
+
+        self::$currentTemplate = str_replace('{{{$stylesheets}}}',  self::getStylesheetsHTML(), self::$currentTemplate); // PHP COMPILED
     }
 
     /**
