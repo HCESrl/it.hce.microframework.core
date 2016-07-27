@@ -13,7 +13,6 @@ use JsonSchema\Validator;
 class Controller
 {
     /* STATIC */
-
     const htaccessGetVar = 'file';
     const defaultController = 'homepage/homepage';
     const controllersExt = '.json';
@@ -105,6 +104,15 @@ class Controller
     public function isRtl()
     {
         return isset($this->config->direction) && $this->config->direction === 'rtl';
+    }
+
+    /**
+     * Check if we are in a Ajax environment
+     * @return bool
+     */
+    public function isAjax()
+    {
+        return isset($this->config->ajax) && $this->config->ajax;
     }
 
     public function __toString()

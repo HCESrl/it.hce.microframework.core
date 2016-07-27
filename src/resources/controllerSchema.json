@@ -11,6 +11,11 @@
       "default": "ltr",
       "required": false
     },
+    "ajax": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    },
     "components": {
       "type": "array",
       "required": true,
