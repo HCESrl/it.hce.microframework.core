@@ -20,9 +20,9 @@ class MicroFramework
      */
     public function __construct()
     {
-        ResourcesFactory::writeResources();
         $this->controller = new Controller(Controller::getControllerFromUrl());
 
+        ResourcesFactory::writeResources($this->controller->isRtl());
         $this->printTemplate();
     }
 

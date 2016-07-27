@@ -72,6 +72,7 @@ class Controller
     private function loadGlobalModel()
     {
         $this->models = array_merge($this->models, ModelsFactory::loadGlobalModel());
+        $this->models['GLOBAL']->isRtl = $this->isRtl();
     }
 
     private function loadModels()
@@ -95,6 +96,15 @@ class Controller
         } else {
             return PathHelper::getPublicPath(self::defaultController . self::controllersExt);
         }
+    }
+
+    /**
+     * Check if we are in a RTL environment
+     * @return bool
+     */
+    public function isRtl()
+    {
+        return isset($this->config->direction) && $this->config->direction === 'rtl';
     }
 
     public function __toString()

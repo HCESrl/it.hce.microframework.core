@@ -43,6 +43,7 @@ class ModelsFactory
     {
         $global = [
             'css' => '/' . ResourcesFactory::cssFilePath . '?' . time(),
+            'rtlCss' => '/' . ResourcesFactory::rtlFilePath . '?' . time(),
             'js' => '/' . ResourcesFactory::jsFilePath . '?' . time(),
         ];
 
