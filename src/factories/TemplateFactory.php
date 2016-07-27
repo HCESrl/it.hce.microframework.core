@@ -122,7 +122,7 @@ class TemplateFactory
     }
 
     private static function getCurrentCssFilename($addExtension = false) {
-        $fileName = self::$mainScssFilename;
+        $fileName = self::mainScssFilename;
         if(self::$isRTL){
             $fileName .= "-rtl";
         }
