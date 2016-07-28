@@ -188,7 +188,7 @@ class TemplateFactory
 
     private static function getStylesheets(){
         $mainStylesheet =  array('../css/'.self::getCurrentCssFilename(true));
-        return array_add($mainStylesheet, self::$extraStylesheets);
+        return array_merge($mainStylesheet, self::$extraStylesheets);
 
     }
 
