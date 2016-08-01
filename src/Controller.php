@@ -87,6 +87,7 @@ class Controller
     private function loadGlobalModel()
     {
         $this->models = array_merge($this->models, ModelsFactory::loadGlobalModel());
+        $this->models['GLOBAL']->config = $this->config;
         $this->models['GLOBAL']->isRtl = $this->isRtl();
         $this->models['GLOBAL']->message = $this->message;
     }
