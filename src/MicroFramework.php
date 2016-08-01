@@ -3,6 +3,7 @@
 namespace it\hce\microframework\core;
 
 
+use it\hce\microframework\core\exceptions\MicroFrameworkException;
 use it\hce\microframework\core\factories\ResourcesFactory;
 use it\hce\microframework\core\helpers\HeaderHelper;
 
@@ -21,6 +22,23 @@ class MicroFramework
      */
     public function __construct()
     {
+        try {
+            $this->init();
+        } catch (MicroFrameworkException $e) {
+            HeaderHelper::set500Header();
+
+            try {
+                $this->controller = new Controller(Controller::get500Controller(), $e->__toString());
+            } catch (MicroFrameworkException $e) {
+                die('Unexpected error');
+            }
+        }
+
+        $this->printTemplate();
+    }
+
+    private function init()
+    {
         $this->controller = new Controller(Controller::getControllerFromUrl());
 
         if ($this->controller->isAjax()) {
@@ -30,8 +48,6 @@ class MicroFramework
         if (!$this->controller->isAjax()) {
             ResourcesFactory::writeResources($this->controller->isRtl());
         }
-
-        $this->printTemplate();
     }
 
     private function printTemplate()

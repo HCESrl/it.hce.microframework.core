@@ -4,7 +4,8 @@ namespace it\hce\microframework\core\factories;
 
 
 use CSSJanus;
-use it\hce\microframework\core\exceptions\ResourceWriteException;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use it\hce\microframework\core\exceptions\MicroFrameworkException;
 use it\hce\microframework\core\helpers\PathHelper;
 use Leafo\ScssPhp\Compiler;
 use MatthiasMullie\Minify\CSS;
@@ -19,6 +20,11 @@ class SassFactory
     private $minifier;
     private $compiledCss;
 
+    /**
+     * SassFactory constructor.
+     * @param bool $rtl
+     * @throws MicroFrameworkException
+     */
     public function __construct($rtl = false)
     {
         // load the compiler
@@ -28,8 +34,11 @@ class SassFactory
         $this->minifier = new CSS();
 
         // load main.scss
+        if (!file_exists(PathHelper::getResourcesPath(self::mainScssPath))) {
+            throw new MicroFrameworkException('main.scss was not found');
+        }
+
         $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainScssPath));
-        //TODO: throw exception if file does not exists
 
         // set rtl
         $this->rtl = $rtl;
@@ -73,14 +82,14 @@ class SassFactory
     /**
      * Writes the loaded SCSS in a given css file (overwrite)
      * @param $file
-     * @throws ResourceWriteException
+     * @throws MicroFrameworkException
      */
     public function write($file)
     {
         if (is_writable(dirname($file))) {
             file_put_contents($file, $this->compiledCss);
         } else {
-            throw new ResourceWriteException($file . ' not writable');
+            throw new MicroFrameworkException($file . ' is not writable');
         }
     }
 }

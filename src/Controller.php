@@ -3,8 +3,7 @@
 namespace it\hce\microframework\core;
 
 
-use it\hce\microframework\core\exceptions\BadDefinitionException;
-use it\hce\microframework\core\exceptions\ControllerNotFoundException;
+use it\hce\microframework\core\exceptions\MicroFrameworkException;
 use it\hce\microframework\core\factories\ModelsFactory;
 use it\hce\microframework\core\factories\TemplateFactory;
 use it\hce\microframework\core\helpers\PathHelper;
@@ -15,6 +14,7 @@ class Controller
     /* STATIC */
     const htaccessGetVar = 'file';
     const defaultController = 'homepage/homepage';
+    const serverErrorController = 'errors/500';
     const controllersExt = '.json';
     const templatesFolder = 'templates.';
 
@@ -26,12 +26,24 @@ class Controller
     /**
      * Controller constructor.
      * @param $controllerPath
+     * @param $message string a global message
+     * @throws MicroFrameworkException
      */
-    public function __construct($controllerPath)
+    public function __construct($controllerPath, $message = '')
     {
         // gets the real controller path on the filesystem
         $this->controllerPath = $controllerPath;
+        $this->message = $message;
 
+        try {
+            $this->init();
+        } catch (MicroFrameworkException $e) {
+            throw $e;
+        }
+    }
+
+    private function init()
+    {
         // read the config file
         $this->readConfiguration();
 
@@ -47,7 +59,7 @@ class Controller
         if (file_exists($this->controllerPath)) {
             $this->config = json_decode(file_get_contents($this->controllerPath));
         } else {
-            throw new ControllerNotFoundException('The requested controller was not found in: ' . $this->controllerPath);
+            throw new MicroFrameworkException('The requested controller was not found in: ' . $this->controllerPath);
         }
     }
 
@@ -57,26 +69,44 @@ class Controller
         $validator->check($this->config, file_get_contents(dirname(__FILE__) . '/resources/controllerSchema.json'));
 
         if (!$validator->isValid()) {
-            throw new BadDefinitionException('The JSON file is not valid');
+            throw new MicroFrameworkException('The JSON file is not valid');
         }
     }
 
     private function loadResources()
     {
-        $this->loadGlobalModel();
-        $this->loadModels();
-        $this->loadTemplate();
+        try {
+            $this->loadGlobalModel();
+            $this->loadModels();
+            $this->loadTemplate();
+        } catch (MicroFrameworkException $e) {
+            throw $e;
+        }
     }
 
     private function loadGlobalModel()
     {
         $this->models = array_merge($this->models, ModelsFactory::loadGlobalModel());
         $this->models['GLOBAL']->isRtl = $this->isRtl();
+        $this->models['GLOBAL']->message = $this->message;
+    }
+
+    /**
+     * Check if we are in a RTL environment
+     * @return bool
+     */
+    public function isRtl()
+    {
+        return isset($this->config->direction) && $this->config->direction === 'rtl';
     }
 
     private function loadModels()
     {
-        $this->models = array_merge($this->models, ModelsFactory::loadModels($this->config->components));
+        try {
+            $this->models = array_merge($this->models, ModelsFactory::loadModels($this->config->components));
+        } catch (MicroFrameworkException $e) {
+            throw $e;
+        }
     }
 
     private function loadTemplate()
@@ -97,13 +127,9 @@ class Controller
         }
     }
 
-    /**
-     * Check if we are in a RTL environment
-     * @return bool
-     */
-    public function isRtl()
+    public static function get500Controller()
     {
-        return isset($this->config->direction) && $this->config->direction === 'rtl';
+        return PathHelper::getPublicPath(self::serverErrorController . self::controllersExt);
     }
 
     /**

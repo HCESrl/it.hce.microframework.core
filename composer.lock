@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a1b8a18960f7960201ba974c7d4753d7",
-    "content-hash": "281ff4f88358e596e10222f051ce056d",
+    "hash": "ea0becb6344a9c074f40ee16c9d696cf",
+    "content-hash": "7cdba56a11d7331f3ee06935804bbb7a",
     "packages": [
         {
             "name": "cssjanus/cssjanus",
@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "1645cb9e654a3b23eb72af204cfa573989b52d33"
+                "reference": "0abf6f98b136e62f93214a97fada9ecd45e2f7b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/1645cb9e654a3b23eb72af204cfa573989b52d33",
-                "reference": "1645cb9e654a3b23eb72af204cfa573989b52d33",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/0abf6f98b136e62f93214a97fada9ecd45e2f7b2",
+                "reference": "0abf6f98b136e62f93214a97fada9ecd45e2f7b2",
                 "shasum": ""
             },
             "require": {
@@ -192,7 +192,7 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "http://laravel.com",
-            "time": "2016-07-23 03:19:50"
+            "time": "2016-07-28 03:34:45"
         },
         {
             "name": "illuminate/events",
@@ -295,12 +295,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "8c1e198cbd9d2395ebe955966c0c26716e7e70e1"
+                "reference": "b327e1f1feb9b648919994b848cf698d53c17b48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/8c1e198cbd9d2395ebe955966c0c26716e7e70e1",
-                "reference": "8c1e198cbd9d2395ebe955966c0c26716e7e70e1",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/b327e1f1feb9b648919994b848cf698d53c17b48",
+                "reference": "b327e1f1feb9b648919994b848cf698d53c17b48",
                 "shasum": ""
             },
             "require": {
@@ -315,7 +315,6 @@
             },
             "suggest": {
                 "illuminate/filesystem": "Required to use the composer class (5.2.*).",
-                "jeremeamia/superclosure": "Required to be able to serialize closures (~2.2).",
                 "symfony/process": "Required to use the composer class (3.2.*).",
                 "symfony/var-dumper": "Required to use the dd function (3.2.*)."
             },
@@ -345,7 +344,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
-            "time": "2016-07-26 00:30:54"
+            "time": "2016-07-29 19:08:08"
         },
         {
             "name": "illuminate/view",
@@ -397,16 +396,16 @@
         },
         {
             "name": "jenssegers/blade",
-            "version": "v1.0.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jenssegers/blade.git",
-                "reference": "14b64109104ca2eac1f9fb8e5da0dc6c3c96b762"
+                "reference": "64e40c988583a790224d0c379be3dd074417b217"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jenssegers/blade/zipball/14b64109104ca2eac1f9fb8e5da0dc6c3c96b762",
-                "reference": "14b64109104ca2eac1f9fb8e5da0dc6c3c96b762",
+                "url": "https://api.github.com/repos/jenssegers/blade/zipball/64e40c988583a790224d0c379be3dd074417b217",
+                "reference": "64e40c988583a790224d0c379be3dd074417b217",
                 "shasum": ""
             },
             "require": {
@@ -414,8 +413,8 @@
             },
             "require-dev": {
                 "mockery/mockery": "^0.9",
-                "phpunit/phpunit": "^4.0",
-                "satooshi/php-coveralls": "0.6"
+                "phpunit/phpunit": "^4.0|^5.0",
+                "satooshi/php-coveralls": "^1.0"
             },
             "type": "library",
             "autoload": {
@@ -430,7 +429,7 @@
             "authors": [
                 {
                     "name": "Jens Segers",
-                    "homepage": "http://jenssegers.be"
+                    "homepage": "https://jenssegers.com"
                 }
             ],
             "description": "The standalone version of Laravel's Blade templating engine for use outside of Laravel.",
@@ -441,7 +440,7 @@
                 "template",
                 "view"
             ],
-            "time": "2015-08-29 09:09:57"
+            "time": "2016-03-21 11:33:58"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -768,12 +767,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "081a5659f767d317ac71ce0bce8a2101467e816e"
+                "reference": "60192753166696de6ac6414356bdaed1dfa15595"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/081a5659f767d317ac71ce0bce8a2101467e816e",
-                "reference": "081a5659f767d317ac71ce0bce8a2101467e816e",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/60192753166696de6ac6414356bdaed1dfa15595",
+                "reference": "60192753166696de6ac6414356bdaed1dfa15595",
                 "shasum": ""
             },
             "require": {
@@ -817,7 +816,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2016-07-26 08:08:27"
+            "time": "2016-07-30 07:26:43"
         },
         {
             "name": "symfony/finder",
@@ -872,7 +871,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "jenssegers/blade": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
