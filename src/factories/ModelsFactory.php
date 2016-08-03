@@ -34,9 +34,15 @@ class ModelsFactory
      * @param $componentName
      * @param $dataSet
      * @return object
+     * @throws MicroFrameworkException
      */
     public static function loadJSON($componentName, $dataSet)
     {
+        $dataSetFile = PathHelper::getComponentsPath($componentName . '/datasets/' . $dataSet . '.json');
+        if (!file_exists($dataSetFile)) {
+            throw new MicroFrameworkException($componentName . '/datasets/' . $dataSet . '.json is not a valid Dataset (missing file)');
+        }
+
         return (object)json_decode(file_get_contents(PathHelper::getComponentsPath($componentName . '/datasets/' . $dataSet . '.json')), true);
     }
 

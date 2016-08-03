@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a15e26db561439da122a23b93d1e208b",
-    "content-hash": "c99edf02747ef68f1c5a41b56d2d2277",
+    "hash": "ca9a6a7f384b3344733e2ed338e88337",
+    "content-hash": "c26ac66df6997fd3c8c3a11dfb5dcc2e",
     "packages": [
         {
             "name": "cssjanus/cssjanus",
