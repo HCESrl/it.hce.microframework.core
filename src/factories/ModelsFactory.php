@@ -43,7 +43,7 @@ class ModelsFactory
             throw new MicroFrameworkException($componentName . '/datasets/' . $dataSet . '.json is not a valid Dataset (missing file)');
         }
 
-        return (object)json_decode(file_get_contents(PathHelper::getComponentsPath($componentName . '/datasets/' . $dataSet . '.json')), true);
+        return (object)json_decode(file_get_contents(PathHelper::getComponentsPath($componentName . '/datasets/' . $dataSet . '.json')));
     }
 
     private static function checkModel($model)
