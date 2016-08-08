@@ -61,7 +61,7 @@ class JavascriptFactory
 
     private function collectJSFromFile($file)
     {
-        $jsResult = '\r\n/* INCLUDE $file */ \r\n' . file_get_contents($file);
+        $jsResult = "\r\n/* INCLUDE " . $file . " */ \r\n" . file_get_contents($file);
         $this->minifier->add($jsResult);
     }
 
