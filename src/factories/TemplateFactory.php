@@ -34,13 +34,16 @@ class TemplateFactory
 
         // responsive images
         self::responsiveImagesBlade();
+
+        // encode json template
+        self::jsonEncodeBladeTemplate();
     }
 
     private static function responsiveImagesBlade()
     {
         self::$blade->compiler()->directive('responsiveImage', function ($value) {
             return '<?php
-                //explode
+                // explode
                 $value = ' . $value . ';
                 $image = $value[\'image\'];
                 $componentName = $value[\'component\'];
@@ -66,7 +69,23 @@ class TemplateFactory
                 // glue all
                 $output = \'<img \' . trim($outSrc) . \' \' . trim($outSrcSet) . \' \' . trim($attributes) . \' />\';
                 
-                echo $output; ?>';
+                echo $output;
+                ?>';
+        });
+    }
+
+    private static function jsonEncodeBladeTemplate()
+    {
+        self::$blade->compiler()->directive('jsonEncodeBladeTemplate', function ($value) {
+            return '<?php
+                // explode
+                $value = ' . $value . ';
+                $templateName = $value[\'templateName\'];
+                $model = $value[\'model\'];
+                
+                $renderedTemplate = \it\hce\microframework\core\factories\TemplateFactory::loadTemplate($templateName, $model);
+                echo json_encode($renderedTemplate);
+                ?>';
         });
     }
 }
