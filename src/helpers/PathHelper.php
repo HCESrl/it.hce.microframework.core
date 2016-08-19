@@ -96,7 +96,8 @@ class PathHelper
         $result = new RegexIterator($iterator, $filter, RecursiveRegexIterator::GET_MATCH);
 
         foreach ($result as $key => $value) {
-            if ($thisEditTime = filemtime($key) > $lastEditDate) {
+            $thisEditTime = filemtime($key);
+            if ( $thisEditTime > $lastEditDate) {
                 $lastEditDate = $thisEditTime;
             }
         }
