@@ -47,12 +47,20 @@ class ResourcesFactory
     public static function writeJS()
     {
         $targetJsPath = PathHelper::getPublicPath(self::jsFilePath);
+        self::$jsFactory = new JavascriptFactory();
+
+        $modTimeTarget = filemtime($targetJsPath);
+
+        $staticFileModTime = self::$jsFactory->getStaticJSLastEditDate();
+        $compontentsFileModTime = PathHelper::getLastEditDate(PathHelper::getComponentsPath(), '/^.+\.js$/i') ;
+
+        echo $staticFileModTime . " $compontentsFileModTime $modTimeTarget";
 
         if (!PathHelper::isResourceLocked($targetJsPath)
-            && PathHelper::getLastEditDate(PathHelper::getComponentsPath(), '/^.+\.js$/i') > filemtime($targetJsPath)
+                && ($staticFileModTime > $modTimeTarget || $compontentsFileModTime > $modTimeTarget)
+
         ) {
             // Write minified JS to main.js
-            self::$jsFactory = new JavascriptFactory();
             self::$jsFactory->collectJS();
             self::$jsFactory->write($targetJsPath);
         }
