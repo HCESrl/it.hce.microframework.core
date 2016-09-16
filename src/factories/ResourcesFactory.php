@@ -54,7 +54,6 @@ class ResourcesFactory
         $staticFileModTime = self::$jsFactory->getStaticJSLastEditDate();
         $compontentsFileModTime = PathHelper::getLastEditDate(PathHelper::getComponentsPath(), '/^.+\.js$/i') ;
 
-        echo $staticFileModTime . " $compontentsFileModTime $modTimeTarget";
 
         if (!PathHelper::isResourceLocked($targetJsPath)
                 && ($staticFileModTime > $modTimeTarget || $compontentsFileModTime > $modTimeTarget)
