@@ -33,18 +33,23 @@ class SassFactory
         //load the minifier
         $this->minifier = new CSS();
 
-        // load main.scss
-        if (!file_exists(PathHelper::getResourcesPath(self::mainScssPath))) {
-            throw new MicroFrameworkException('main.scss was not found');
-        }
-
         // set rtl
         $this->rtl = $rtl;
 
         if ($this->rtl) {
-            $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainScssPath));
-        } else {
+            // load main.rtl.scss
+            if (!file_exists(PathHelper::getResourcesPath(self::mainRtlScssPath))) {
+                throw new MicroFrameworkException('main.rtl.scss not found');
+            }
+
             $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainRtlScssPath));
+        } else {
+            // load main.scss
+            if (!file_exists(PathHelper::getResourcesPath(self::mainScssPath))) {
+                throw new MicroFrameworkException('main.scss not found');
+            }
+
+            $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainScssPath));
         }
     }
 
