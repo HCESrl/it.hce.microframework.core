@@ -4,7 +4,6 @@ namespace it\hce\microframework\core\factories;
 
 
 use CSSJanus;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use it\hce\microframework\core\exceptions\MicroFrameworkException;
 use it\hce\microframework\core\helpers\PathHelper;
 use Leafo\ScssPhp\Compiler;
@@ -13,6 +12,7 @@ use MatthiasMullie\Minify\CSS;
 class SassFactory
 {
     const mainScssPath = 'css/main.scss';
+    const mainRtlScssPath = 'css/main.rtl.scss';
     const scssPath = 'css/';
 
     private $compiler;
@@ -38,10 +38,14 @@ class SassFactory
             throw new MicroFrameworkException('main.scss was not found');
         }
 
-        $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainScssPath));
-
         // set rtl
         $this->rtl = $rtl;
+
+        if ($this->rtl) {
+            $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainScssPath));
+        } else {
+            $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainRtlScssPath));
+        }
     }
 
     /**
