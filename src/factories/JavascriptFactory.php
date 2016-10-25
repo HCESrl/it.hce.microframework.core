@@ -84,7 +84,8 @@ class JavascriptFactory
         $this->minifier->add($jsResult);
     }
 
-    private function getFileListFromDirectory($directory){
+    private function getFileListFromDirectory($directory)
+    {
         $directory = new RecursiveDirectoryIterator($directory);
         $iterator = new RecursiveIteratorIterator($directory);
         $result = new RegexIterator($iterator, '/^.+\.js$/i', RecursiveRegexIterator::GET_MATCH);
