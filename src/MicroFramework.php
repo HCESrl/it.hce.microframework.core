@@ -79,7 +79,7 @@ class MicroFramework
         mkdir($destinationFolder . '/js/');
         copy(PathHelper::getPublicPath('css/main.css'), $destinationFolder . '/css/main.css');
         copy(PathHelper::getPublicPath('css/main.css'), $destinationFolder . '/css/main.rtl.css');
-        copy(PathHelper::getPublicPath('css/main.css'), $destinationFolder . '/js/main.js');
+        copy(PathHelper::getPublicPath('js/main.js'), $destinationFolder . '/js/main.js');
 
         $directory = new RecursiveDirectoryIterator(PathHelper::getPublicPath());
         $iterator = new RecursiveIteratorIterator($directory);
