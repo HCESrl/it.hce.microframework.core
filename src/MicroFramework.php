@@ -61,6 +61,13 @@ class MicroFramework
         echo $this->controller;
     }
 
+    private static function createDirIfNotExists($path){
+        if (!file_exists($path)) {
+          return  mkdir($path );
+        }
+        return true;
+    }
+
     /**
      * Prints the whole project
      * @param string $folder
@@ -75,8 +82,8 @@ class MicroFramework
         ResourcesFactory::writeResources(false);
 
         // creates the static folders and files
-        mkdir($destinationFolder . '/css/');
-        mkdir($destinationFolder . '/js/');
+        self::createDirIfNotExists($destinationFolder . '/css/');
+        self::createDirIfNotExists($destinationFolder . '/js/');
         copy(PathHelper::getPublicPath('css/main.css'), $destinationFolder . '/css/main.css');
         copy(PathHelper::getPublicPath('css/main.css'), $destinationFolder . '/css/main.rtl.css');
         copy(PathHelper::getPublicPath('js/main.js'), $destinationFolder . '/js/main.js');
@@ -88,7 +95,7 @@ class MicroFramework
         foreach ($result as $key => $value) {
             // write each controller in a sub directory
             $controller = new Controller($key);
-            mkdir(dirname($destinationFolder . '/' . array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]));
+            self::createDirIfNotExists(dirname($destinationFolder . '/' . array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]));
             file_put_contents($destinationFolder . '/' . str_replace('.json', '.html', array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]), $controller);
         }
     }
