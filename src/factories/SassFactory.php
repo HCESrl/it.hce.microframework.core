@@ -17,6 +17,7 @@ class SassFactory
 
     private $compiler;
     private $main;
+    private $mainRtl;
     private $minifier;
     private $compiledCss;
 
@@ -42,15 +43,14 @@ class SassFactory
                 throw new MicroFrameworkException('main.rtl.scss not found');
             }
 
-            $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainRtlScssPath));
-        } else {
-            // load main.scss
-            if (!file_exists(PathHelper::getResourcesPath(self::mainScssPath))) {
-                throw new MicroFrameworkException('main.scss not found');
-            }
-
-            $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainScssPath));
+            $this->mainRtl = file_get_contents(PathHelper::getResourcesPath(self::mainRtlScssPath));
         }
+            // load main.scss
+        if (!file_exists(PathHelper::getResourcesPath(self::mainScssPath))) {
+            throw new MicroFrameworkException('main.scss not found');
+        }
+
+        $this->main = file_get_contents(PathHelper::getResourcesPath(self::mainScssPath));
     }
 
     /**
@@ -71,6 +71,8 @@ class SassFactory
 
         if ($this->rtl) {
             $compiledSass = $this->rightToLeft($compiledSass);
+            $rtlSass = $this->compiler->compile($this->mainRtl);
+            $compiledSass = $compiledSass . $rtlSass;
         }
 
         // minify the result
