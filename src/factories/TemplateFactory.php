@@ -45,6 +45,11 @@ class TemplateFactory
             return '<?php
                 // explode
                 $value = ' . $value . ';
+                 if(isset($value["path"])){
+                    $path = $value["path"];
+                } else {
+                    $path = \'../images/components/\';
+                }
                 $image = $value[\'image\'];
                 $componentName = $value[\'component\'];
                 $attributes = isset($value[\'attributes\']) ? $value[\'attributes\'] : \'\';
@@ -54,12 +59,12 @@ class TemplateFactory
                 $srcSet = $config->resolutions;
     
                 // src attribute
-                $outSrc = \'src="../images/components/\' . $srcSet[0] . \'/\' . $componentName . \'/\' . $image . \'"\';
+                $outSrc = \'src="\'. $path .\'\' . $srcSet[0] . \'/\' . $componentName . \'/\' . $image . \'"\';
     
                 // srcset attribute
                 $outSrcSet = \'srcset="\';
                 foreach ($srcSet as $width) {
-                    $outSrcSet .= \'../images/components/\' . $width . \'/\' . $componentName . \'/\' . $image . \' \' . $width . \'w, \';
+                    $outSrcSet .= \'\'. $path .\'\' . $width . \'/\' . $componentName . \'/\' . $image . \' \' . $width . \'w, \';
                 }
                 $outSrcSet = substr($outSrcSet, 0, -2) . \'"\';
     
