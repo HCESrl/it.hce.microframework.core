@@ -18,19 +18,24 @@ class ResourcesFactory
      * Writes the resource package
      * @param bool $rtl
      */
-    public static function writeResources($rtl = false)
+    public static function writeResources($rtl = false, $destinationFolder = false)
     {
-        self::writeCSS($rtl);
-        self::writeJS();
+        self::writeCSS($rtl, $destinationFolder);
+        self::writeJS($destinationFolder);
     }
 
     /**
      * Writes a compiled CSS on public/css/main.css if not locked
      * @param bool $rtl
      */
-    public static function writeCSS($rtl = false)
+    public static function writeCSS($rtl = false, $destinationFolder = false)
     {
-        $targetCssPath = PathHelper::getPublicPath($rtl ? self::rtlFilePath : self::cssFilePath);
+        if($destinationFolder){
+            $targetCssPath = $destinationFolder . ($rtl ? self::rtlFilePath : self::cssFilePath);
+        } else {
+            $targetCssPath = PathHelper::getPublicPath($rtl ? self::rtlFilePath : self::cssFilePath);
+        }
+
 
         if (!PathHelper::isResourceLocked($targetCssPath)) {
             // Write minified CSS to main.css
@@ -44,9 +49,14 @@ class ResourcesFactory
     /**
      * Writes a compiled JS on public/js/main.js if not locked and the last compile is newer than the last components' edit
      */
-    public static function writeJS()
+    public static function writeJS($destinationFolder)
     {
-        $targetJsPath = PathHelper::getPublicPath(self::jsFilePath);
+        if($destinationFolder){
+
+            $targetJsPath = $destinationFolder. (self::jsFilePath);
+        } else {
+            $targetJsPath = PathHelper::getPublicPath(self::jsFilePath);
+        }
         self::$jsFactory = new JavascriptFactory();
 
         $modTimeTarget = filemtime($targetJsPath);

@@ -116,10 +116,16 @@ class JavascriptFactory
      */
     public function write($file)
     {
-        if (is_writable(dirname($file))) {
+        if ((!file_exists($file) && is_writable(dirname($file))) || is_writable($file)) {
             file_put_contents($file, $this->output());
         } else {
+            if((!file_exists($file) && !is_writable(dirname($file))) ){
+                throw new MicroFrameworkException($file . ' does not exist and directory is not writable');
+            } else if(!is_writable($file)){
             throw new MicroFrameworkException($file . ' is not writable');
+            } else {
+                throw new MicroFrameworkException("Unknown error trying to write $file ");
+            }
         }
     }
 

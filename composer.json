@@ -1,16 +1,17 @@
 {
   "name": "hce/microframework-core",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "microframework core files",
   "authors": [
     {
-      "name": "Gatto",
-      "email": "mboffo@hce.it"
-    },
-    {
       "name": "Paolo Mioni",
       "email": "pmioni@hce.it"
+    },
+    {
+      "name": "Marco Boffo",
+      "email": "mboffo@hce.it"
     }
+
   ],
   "minimum-stability": "dev",
   "prefer-stable": true,
