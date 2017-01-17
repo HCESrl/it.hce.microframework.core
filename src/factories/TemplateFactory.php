@@ -41,10 +41,12 @@ class TemplateFactory
 
     private static function responsiveImagesBlade()
     {
-        self::$blade->compiler()->directive('responsiveImage', function ($value) {
+        self::$blade->compiler()->directive('responsiveImage', function ($value){
             return '<?php
                 // explode
                 $value = ' . $value . ';
+                $static = '. ((isset($GLOBALS['static']) && $GLOBALS['static']==true)?'true':'false') . ';
+                
                 $image = $value[\'image\'];
                 $componentName = $value[\'component\'];
                 $attributes = isset($value[\'attributes\']) ? $value[\'attributes\'] : \'\';
@@ -54,12 +56,16 @@ class TemplateFactory
                 $srcSet = $config->resolutions;
     
                 // src attribute
-                $outSrc = \'src="../images/components/\' . $srcSet[0] . \'/\' . $componentName . \'/\' . $image . \'"\';
+                $path = "../";
+                if ($static) {
+                  $path = "";
+                }
+                $outSrc = \'src="\'.$path.\'images/components/\' . $srcSet[0] . \'/\' . $componentName . \'/\' . $image . \'"\';
     
                 // srcset attribute
                 $outSrcSet = \'srcset="\';
                 foreach ($srcSet as $width) {
-                    $outSrcSet .= \'../images/components/\' . $width . \'/\' . $componentName . \'/\' . $image . \' \' . $width . \'w, \';
+                    $outSrcSet .= $path.\'images/components/\' . $width . \'/\' . $componentName . \'/\' . $image . \' \' . $width . \'w, \';
                 }
                 $outSrcSet = substr($outSrcSet, 0, -2) . \'"\';
     
@@ -68,7 +74,6 @@ class TemplateFactory
     
                 // glue all
                 $output = \'<img \' . trim($outSrc) . \' \' . trim($outSrcSet) . \' \' . trim($attributes) . \' />\';
-                
                 echo $output;
                 ?>';
         });

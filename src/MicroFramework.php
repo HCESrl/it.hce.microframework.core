@@ -92,6 +92,8 @@ class MicroFramework
         $iterator = new RecursiveIteratorIterator($directory);
         $result = new RegexIterator($iterator, '/^.+\.json$/i', RecursiveRegexIterator::GET_MATCH);
 
+        $GLOBALS['static'] = true;
+
         foreach ($result as $key => $value) {
             // write each controller in a sub directory
             $controller = new Controller($key);
