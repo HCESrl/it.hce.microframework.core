@@ -22,6 +22,7 @@ class Controller
     private $models = array();
     private $template;
     private $config = '';
+    private $isStaticOutput = false;
 
     /**
      * Controller constructor.
@@ -29,11 +30,12 @@ class Controller
      * @param $message string a global message
      * @throws MicroFrameworkException
      */
-    public function __construct($controllerPath, $message = '')
+    public function __construct($controllerPath, $message = '', $isStaticOutput = false)
     {
         // gets the real controller path on the filesystem
         $this->controllerPath = $controllerPath;
         $this->message = $message;
+        $this->isStaticOutput = $isStaticOutput;
 
         try {
             $this->init();
@@ -52,6 +54,10 @@ class Controller
 
         // load the requested resources
         $this->loadResources();
+    }
+
+    public function getOutputExtension() {
+        return ($this->isXml()?'xml':'html');
     }
 
     private function readConfiguration()
@@ -112,7 +118,7 @@ class Controller
 
     private function loadTemplate()
     {
-        $this->template = TemplateFactory::loadTemplate(self::templatesFolder . $this->config->templateName, $this->models);
+        $this->template = TemplateFactory::loadTemplate(self::templatesFolder . $this->config->templateName, $this->models, $this->isStaticOutput);
     }
 
     /**
@@ -140,6 +146,11 @@ class Controller
     public function isAjax()
     {
         return isset($this->config->ajax) && $this->config->ajax;
+    }
+
+    public function isXml()
+    {
+        return isset($this->config->xml) && $this->config->xml;
     }
 
     public function __toString()

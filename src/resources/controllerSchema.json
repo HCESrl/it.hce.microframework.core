@@ -16,6 +16,11 @@
       "default": false,
       "required": false
     },
+    "xml": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    },
     "components": {
       "type": "array",
       "required": true,
