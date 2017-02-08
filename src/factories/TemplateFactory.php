@@ -10,6 +10,7 @@ class TemplateFactory
 {
     private static $blade;
     private static $config;
+    private static $isStaticOutput;
 
     /**
      * Loads a Blade template
@@ -17,11 +18,11 @@ class TemplateFactory
      * @param $models
      * @return string
      */
-    public static function loadTemplate($templateName = 'templates.homepage', $models = [])
+    public static function loadTemplate($templateName = 'templates.homepage', $models = [], $isStaticOutput = false)
     {
         // load Blade engine
         self::$blade = new Blade(PathHelper::getBasePath(), PathHelper::getCachePath());
-
+        self::$isStatic = $isStaticOutput;
         // load blade plugins
         self::loadPlugins();
 
@@ -45,11 +46,16 @@ class TemplateFactory
             return '<?php
                 // explode
                 $value = ' . $value . ';
-                 if(isset($value["path"])){
+                $static = '.self::$isStaticOutput .';
+                if(isset($value["path"])){
                     $path = $value["path"];
                 } else {
                     $path = \'../images/components/\';
+                    if ($static) {
+                      $path = \'images/components/\';
+                    }
                 }
+                
                 $image = $value[\'image\'];
                 $componentName = $value[\'component\'];
                 $attributes = isset($value[\'attributes\']) ? $value[\'attributes\'] : \'\';

@@ -12,6 +12,10 @@ class HeaderHelper
         self::$header = 'Content-type: application/json';
     }
 
+    public static function setXmlHeader()
+    {
+        self::$header = 'Content-type: text/xml';
+    }
     public static function set404Header()
     {
         http_response_code(404);
