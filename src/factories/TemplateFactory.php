@@ -46,7 +46,7 @@ class TemplateFactory
             return '<?php
                 // explode
                 $value = ' . $value . ';
-                $static = '. (self::$isStaticOutput)?'true':'false' .';
+                $static = '. ((self::$isStaticOutput)?'true':'false') .';
                 if(isset($value["path"])){
                     $path = $value["path"];
                 } else {
