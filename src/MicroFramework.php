@@ -51,6 +51,9 @@ class MicroFramework
             HeaderHelper::setJsonHeader();
         }
 
+        if ($this->controller->isXml()) {
+            HeaderHelper::setXmlHeader();
+        }
         if (!$this->controller->isAjax()) {
             ResourcesFactory::writeResources($this->controller->isRtl());
         }
@@ -82,7 +85,7 @@ class MicroFramework
      * Prints the whole project
      * @param string $folder
      */
-    public static function printProject($folder = 'static', $exclude = ['css', 'js'])
+    public static function printProject($folder = 'static/', $exclude = ['css', 'js'])
     {
 
         echo "\033[34m  starting printProject\033[0m\n";
@@ -119,7 +122,7 @@ class MicroFramework
             // write each controller in a sub directory
             $controller = new Controller($key);
             self::createDirIfNotExists(dirname($destinationFolder . '/' . array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]));
-            file_put_contents($destinationFolder . '/' . str_replace('.json', '.html', array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]), $controller);
+            file_put_contents($destinationFolder . '/' . str_replace('.json', '.'.$controller->getOutputExtension(), array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]), $controller);
         }
     }
 }
