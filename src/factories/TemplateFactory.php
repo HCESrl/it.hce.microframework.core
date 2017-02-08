@@ -41,12 +41,15 @@ class TemplateFactory
 
     private static function responsiveImagesBlade()
     {
-        self::$blade->compiler()->directive('responsiveImage', function ($value){
+        self::$blade->compiler()->directive('responsiveImage', function ($value) {
             return '<?php
                 // explode
                 $value = ' . $value . ';
-                $static = '. ((isset($GLOBALS['static']) && $GLOBALS['static']==true)?'true':'false') . ';
-                
+                 if(isset($value["path"])){
+                    $path = $value["path"];
+                } else {
+                    $path = \'../images/components/\';
+                }
                 $image = $value[\'image\'];
                 $componentName = $value[\'component\'];
                 $attributes = isset($value[\'attributes\']) ? $value[\'attributes\'] : \'\';
@@ -56,16 +59,12 @@ class TemplateFactory
                 $srcSet = $config->resolutions;
     
                 // src attribute
-                $path = "../";
-                if ($static) {
-                  $path = "";
-                }
-                $outSrc = \'src="\'.$path.\'images/components/\' . $srcSet[0] . \'/\' . $componentName . \'/\' . $image . \'"\';
+                $outSrc = \'src="\'. $path .\'\' . $srcSet[0] . \'/\' . $componentName . \'/\' . $image . \'"\';
     
                 // srcset attribute
                 $outSrcSet = \'srcset="\';
                 foreach ($srcSet as $width) {
-                    $outSrcSet .= $path.\'images/components/\' . $width . \'/\' . $componentName . \'/\' . $image . \' \' . $width . \'w, \';
+                    $outSrcSet .= \'\'. $path .\'\' . $width . \'/\' . $componentName . \'/\' . $image . \' \' . $width . \'w, \';
                 }
                 $outSrcSet = substr($outSrcSet, 0, -2) . \'"\';
     
@@ -74,6 +73,7 @@ class TemplateFactory
     
                 // glue all
                 $output = \'<img \' . trim($outSrc) . \' \' . trim($outSrcSet) . \' \' . trim($attributes) . \' />\';
+                
                 echo $output;
                 ?>';
         });

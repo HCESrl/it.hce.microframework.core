@@ -8,6 +8,7 @@ use it\hce\microframework\core\factories\ResourcesFactory;
 use it\hce\microframework\core\helpers\HeaderHelper;
 use it\hce\microframework\core\helpers\PathHelper;
 use RecursiveDirectoryIterator;
+use FilesystemIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
@@ -68,33 +69,53 @@ class MicroFramework
         return true;
     }
 
+    public static function cleanupDirectory($dir) {
+        $di = new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS);
+        $ri = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ( $ri as $file ) {
+            $file->isDir() ?  rmdir($file) : unlink($file);
+        }
+        return true;
+    }
+
     /**
      * Prints the whole project
      * @param string $folder
      */
     public static function printProject($folder = 'static', $exclude = ['css', 'js'])
     {
+
+        echo "\033[34m  starting printProject\033[0m\n";
         // define the destination folder
         $destinationFolder = PathHelper::getBasePath() . $folder;
 
-        // write the whole resource pack
-        ResourcesFactory::writeResources(true);
-        ResourcesFactory::writeResources(false);
+        // clean the destination folder
+        self::cleanupDirectory($destinationFolder);
+
+
+        echo "\033[34m  finished writing resources \033[0m\n";
 
         // creates the static folders and files
         self::createDirIfNotExists($destinationFolder . '/css/');
         self::createDirIfNotExists($destinationFolder . '/js/');
-        copy(PathHelper::getPublicPath('css/main.css'), $destinationFolder . '/css/main.css');
-        copy(PathHelper::getPublicPath('css/main.css'), $destinationFolder . '/css/main.rtl.css');
-        copy(PathHelper::getPublicPath('js/main.js'), $destinationFolder . '/js/main.js');
+
+
+        // write the whole resource pack
+        ResourcesFactory::writeResources(true, $destinationFolder);
+        ResourcesFactory::writeResources(false, $destinationFolder);
+
 
         $directory = new RecursiveDirectoryIterator(PathHelper::getPublicPath());
         $iterator = new RecursiveIteratorIterator($directory);
         $result = new RegexIterator($iterator, '/^.+\.json$/i', RecursiveRegexIterator::GET_MATCH);
 
-        $GLOBALS['static'] = true;
+
+
+        echo "\033[34m  starting iterator \033[0m\n";
+
 
         foreach ($result as $key => $value) {
+            echo "\033[34m  processing $key  \033[0m\n";
             // write each controller in a sub directory
             $controller = new Controller($key);
             self::createDirIfNotExists(dirname($destinationFolder . '/' . array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]));
