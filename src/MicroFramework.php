@@ -120,7 +120,7 @@ class MicroFramework
         foreach ($result as $key => $value) {
             echo "\033[34m  processing $key  \033[0m\n";
             // write each controller in a sub directory
-            $controller = new Controller($key);
+            $controller = new Controller($key, '', true);
             self::createDirIfNotExists(dirname($destinationFolder . '/' . array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]));
             file_put_contents($destinationFolder . '/' . str_replace('.json', '.'.$controller->getOutputExtension(), array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]), $controller);
         }
