@@ -22,7 +22,7 @@ class TemplateFactory
     {
         // load Blade engine
         self::$blade = new Blade(PathHelper::getBasePath(), PathHelper::getCachePath());
-        self::$isStatic = $isStaticOutput;
+        self::$isStaticOutput = $isStaticOutput;
         // load blade plugins
         self::loadPlugins();
 
@@ -46,7 +46,7 @@ class TemplateFactory
             return '<?php
                 // explode
                 $value = ' . $value . ';
-                $static = '.self::$isStaticOutput .';
+                $static = '. (self::$isStaticOutput)?'true':'false' .';
                 if(isset($value["path"])){
                     $path = $value["path"];
                 } else {
