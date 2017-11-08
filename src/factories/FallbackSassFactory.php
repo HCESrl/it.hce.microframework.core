@@ -4,11 +4,12 @@ namespace it\hce\microframework\core\factories;
 
 
 use CSSJanus;
-use Sass;
 use it\hce\microframework\core\exceptions\MicroFrameworkException;
 use it\hce\microframework\core\helpers\PathHelper;
+use Leafo\ScssPhp\Compiler;
+use MatthiasMullie\Minify\CSS;
 
-class SassFactory
+class FallbackSassFactory
 {
     const mainScssPath = 'css/main.scss';
     const mainRtlScssPath = 'css/main.rtl.scss';
@@ -17,6 +18,7 @@ class SassFactory
     private $compiler;
     private $main;
     private $mainRtl;
+    private $minifier;
     private $compiledCss;
 
     /**
@@ -27,10 +29,10 @@ class SassFactory
     public function __construct($rtl = false)
     {
         // load the compiler
-        $this->compiler = new Sass();
+        $this->compiler = new Compiler();
 
-        // set minification
-        $this->compiler->setStyle(Sass::STYLE_COMPRESSED);
+        //load the minifier
+        $this->minifier = new CSS();
 
         // set rtl
         $this->rtl = $rtl;
@@ -43,8 +45,7 @@ class SassFactory
 
             $this->mainRtl = file_get_contents(PathHelper::getResourcesPath(self::mainRtlScssPath));
         }
-
-        // load main.scss
+            // load main.scss
         if (!file_exists(PathHelper::getResourcesPath(self::mainScssPath))) {
             throw new MicroFrameworkException('main.scss not found');
         }
@@ -57,34 +58,36 @@ class SassFactory
      */
     public function collect()
     {
-        $this->compiler->setIncludePath(PathHelper::getResourcesPath(self::scssPath));
+        $this->compiler->setImportPaths(PathHelper::getResourcesPath(self::scssPath));
     }
 
     /**
      * Compiles SCSS
-     * @throws MicroFrameworkException
      * @return string the compiled css
      */
     public function compile()
     {
-        try {
-            $compiledSass = $this->compiler->compile($this->main);
-            
-            if ($this->rtl) {
-                $compiledSass = $this->rightToLeft($compiledSass);
-                $rtlSass = $this->compiler->compile($this->mainRtl);
-                $compiledSass = $compiledSass . $rtlSass;
-            }
+        $compiledSass = $this->compiler->compile($this->main);
 
-            return $this->compiledCss = $compiledSass;
-        } catch (Exception $e) {
-            throw new MicroFrameworkException($e->getMessage());
+        if ($this->rtl) {
+            $compiledSass = $this->rightToLeft($compiledSass);
+            $rtlSass = $this->compiler->compile($this->mainRtl);
+            $compiledSass = $compiledSass . $rtlSass;
         }
+
+        // minify the result
+        return $this->compiledCss = $this->minify($compiledSass);
     }
 
     private function rightToLeft($compiledSass)
     {
         return CSSJanus::transform($compiledSass);
+    }
+
+    private function minify($compiledSass)
+    {
+        $this->minifier->add($compiledSass);
+        return $this->minifier->minify();
     }
 
     /**

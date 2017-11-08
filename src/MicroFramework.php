@@ -95,27 +95,21 @@ class MicroFramework
         // clean the destination folder
         self::cleanupDirectory($destinationFolder);
 
-
         echo "\033[34m  finished writing resources \033[0m\n";
 
         // creates the static folders and files
         self::createDirIfNotExists($destinationFolder . '/css/');
         self::createDirIfNotExists($destinationFolder . '/js/');
 
-
         // write the whole resource pack
         ResourcesFactory::writeResources(true, $destinationFolder);
         ResourcesFactory::writeResources(false, $destinationFolder);
-
 
         $directory = new RecursiveDirectoryIterator(PathHelper::getPublicPath());
         $iterator = new RecursiveIteratorIterator($directory);
         $result = new RegexIterator($iterator, '/^.+\.json$/i', RecursiveRegexIterator::GET_MATCH);
 
-
-
         echo "\033[34m  starting iterator \033[0m\n";
-
 
         foreach ($result as $key => $value) {
             echo "\033[34m  processing $key  \033[0m\n";

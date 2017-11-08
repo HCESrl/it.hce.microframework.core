@@ -30,7 +30,7 @@ class ResourcesFactory
      */
     public static function writeCSS($rtl = false, $destinationFolder = false)
     {
-        if($destinationFolder){
+        if ($destinationFolder) {
             $targetCssPath = $destinationFolder . ($rtl ? self::rtlFilePath : self::cssFilePath);
         } else {
             $targetCssPath = PathHelper::getPublicPath($rtl ? self::rtlFilePath : self::cssFilePath);
@@ -39,7 +39,7 @@ class ResourcesFactory
 
         if (!PathHelper::isResourceLocked($targetCssPath)) {
             // Write minified CSS to main.css
-            self::$sassFactory = new SassFactory($rtl);
+            self::$sassFactory = self::getWorkingSassFactory($rtl);
             self::$sassFactory->collect();
             self::$sassFactory->compile();
             self::$sassFactory->write($targetCssPath);
@@ -51,12 +51,12 @@ class ResourcesFactory
      */
     public static function writeJS($destinationFolder)
     {
-        if($destinationFolder){
-
+        if ($destinationFolder) {
             $targetJsPath = $destinationFolder. (self::jsFilePath);
         } else {
             $targetJsPath = PathHelper::getPublicPath(self::jsFilePath);
         }
+
         self::$jsFactory = new JavascriptFactory();
 
         $modTimeTarget = filemtime($targetJsPath);
@@ -64,14 +64,20 @@ class ResourcesFactory
         $staticFileModTime = self::$jsFactory->getStaticJSLastEditDate();
         $compontentsFileModTime = PathHelper::getLastEditDate(PathHelper::getComponentsPath(), '/^.+\.js$/i') ;
 
-
         if (!PathHelper::isResourceLocked($targetJsPath)
-                && ($staticFileModTime > $modTimeTarget || $compontentsFileModTime > $modTimeTarget)
-
-        ) {
+            && ($staticFileModTime > $modTimeTarget
+            || $compontentsFileModTime > $modTimeTarget)) {
             // Write minified JS to main.js
             self::$jsFactory->collectJS();
             self::$jsFactory->write($targetJsPath);
         }
+    }
+
+    private static function getWorkingSassFactory ($rtl = false) {
+        if (extension_loaded('sass')) {
+            return new SassFactory($rtl);
+        }
+
+        return new FallbackSassFactory($rtl);
     }
 }

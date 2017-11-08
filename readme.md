@@ -1,11 +1,17 @@
 # it.hce.microframework.core
-### a lightweight framework designed for prototyping
+
+> a lightweight framework designed for prototyping
 
 ## Install
+
 * `php composer.phar create-project hce/microframework projectName`
+
 or
+
 * `composer.phar create-project hce/microframework projectName`
+
 then
+
 * `cd projectName`
 * `npm install`
 * Point your webserver to `projectName/public` folder
@@ -13,4 +19,5 @@ then
 * Set `cache` as writable folder
 
 ## Documentation
+
 Please refer to [it.hce.microframework](https://github.com/HCESrl/it.hce.microframework) repository documentation.
