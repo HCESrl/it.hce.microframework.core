@@ -10,7 +10,7 @@ class TemplateFactory
 {
     private static $blade;
     private static $config;
-    private static $isStaticOutput;
+    private static $imagesLinkedFromRoot;
 
     /**
      * Loads a Blade template
@@ -18,11 +18,11 @@ class TemplateFactory
      * @param $models
      * @return string
      */
-    public static function loadTemplate($templateName = 'templates.homepage', $models = [], $isStaticOutput = false)
+    public static function loadTemplate($templateName = 'templates.homepage', $models = [], $imagesLinkedFromRoot = false)
     {
         // load Blade engine
         self::$blade = new Blade(PathHelper::getBasePath(), PathHelper::getCachePath());
-        self::$isStaticOutput = $isStaticOutput;
+        self::$imagesLinkedFromRoot = $imagesLinkedFromRoot;
         // load blade plugins
         self::loadPlugins();
 
@@ -46,7 +46,7 @@ class TemplateFactory
             return '<?php
                 // explode
                 $value = ' . $value . ';
-                $static = '. ((self::$isStaticOutput)?'true':'false') .';
+                $static = '. ((self::$imagesLinkedFromRoot)?'true':'false') .';
                 if(isset($value["path"])){
                     $path = $value["path"];
                 } else {

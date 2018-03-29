@@ -84,8 +84,13 @@ class MicroFramework
     /**
      * Prints the whole project
      * @param string $folder
+     * @param array $exclude
+     * @param bool $useRootFolder  - if true, all images path will work as if all pages are on the root level (img/img.jpg, etc),
+     *  otherwise they will be picked from the directory above (../img/img.jpg)
+     *
+     * @throws MicroFrameworkException
      */
-    public static function printProject($folder = 'static/', $exclude = ['css', 'js'])
+    public static function printProject($folder = 'static/', $useRootFolder = true)
     {
 
         echo "\033[34m  starting printProject\033[0m\n";
@@ -114,7 +119,7 @@ class MicroFramework
         foreach ($result as $key => $value) {
             echo "\033[34m  processing $key  \033[0m\n";
             // write each controller in a sub directory
-            $controller = new Controller($key, '', true);
+            $controller = new Controller($key, '', $useRootFolder);
             self::createDirIfNotExists(dirname($destinationFolder . '/' . array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]));
             file_put_contents($destinationFolder . '/' . str_replace('.json', '.'.$controller->getOutputExtension(), array_slice(explode(PathHelper::getPublicPath(), $value[0]), -1)[0]), $controller);
         }

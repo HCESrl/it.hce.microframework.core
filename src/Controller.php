@@ -22,7 +22,7 @@ class Controller
     private $models = array();
     private $template;
     private $config = '';
-    private $isStaticOutput = false;
+    private $imagesLinkedFromRoot = false;
 
     /**
      * Controller constructor.
@@ -30,12 +30,12 @@ class Controller
      * @param $message string a global message
      * @throws MicroFrameworkException
      */
-    public function __construct($controllerPath, $message = '', $isStaticOutput = false)
+    public function __construct($controllerPath, $message = '', $imagesLinkedFromRoot = false)
     {
         // gets the real controller path on the filesystem
         $this->controllerPath = $controllerPath;
         $this->message = $message;
-        $this->isStaticOutput = $isStaticOutput;
+        $this->imagesLinkedFromRoot = $imagesLinkedFromRoot;
 
         try {
             $this->init();
@@ -118,7 +118,7 @@ class Controller
 
     private function loadTemplate()
     {
-        $this->template = TemplateFactory::loadTemplate(self::templatesFolder . $this->config->templateName, $this->models, $this->isStaticOutput);
+        $this->template = TemplateFactory::loadTemplate(self::templatesFolder . $this->config->templateName, $this->models, $this->imagesLinkedFromRoot);
     }
 
     /**
